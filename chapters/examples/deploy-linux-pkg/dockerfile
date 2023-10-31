@@ -1,0 +1,10 @@
+# 1. Acquire the base image
+FROM osrf/ros:foxy-desktop
+
+# 2. Install packages
+RUN apt-get update && \
+    apt-get install -y ros-foxy-turtlesim
+
+# 3. Configure execution (`workdir`, `entrypoint`, `command`)
+RUN echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
+CMD ["tail", "-f", "/dev/null"]
