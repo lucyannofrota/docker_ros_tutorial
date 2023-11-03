@@ -16,7 +16,7 @@ services:
             - "1348:8080"
 
     turtlesim:
-        image: foxy_turtlesim
+        image: humble_turtlesim
         container_name: turtlesim
         networks:
             - ros

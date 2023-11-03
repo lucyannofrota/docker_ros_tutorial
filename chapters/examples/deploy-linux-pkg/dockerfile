@@ -1,10 +1,10 @@
 # 1. Acquire the base image
-FROM osrf/ros:foxy-desktop
+FROM osrf/ros:humble-desktop
 
 # 2. Install packages
 RUN apt-get update && \
-    apt-get install -y ros-foxy-turtlesim
+    apt-get install -y ros-humble-turtlesim
 
 # 3. Configure execution (`workdir`, `entrypoint`, `command`)
-RUN echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 CMD ["tail", "-f", "/dev/null"]
