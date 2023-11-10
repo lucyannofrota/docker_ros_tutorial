@@ -5,6 +5,6 @@ FROM osrf/ros:humble-desktop
 RUN apt-get update && \
     apt-get install -y ros-humble-turtlesim
 
-# 3. Configure execution (`workdir`, `entrypoint`, `command`)
+# 3. Configure execution (`entrypoint`, `command`)
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 CMD ["tail", "-f", "/dev/null"]

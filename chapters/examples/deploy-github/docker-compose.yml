@@ -15,9 +15,9 @@ services:
         ports:
             - "1348:8080"
 
-    turtlesim:
-        image: humble_turtlesim
-        container_name: turtlesim
+    floor_demo:
+        image: humble_floor_demo
+        container_name: floor_demo
         networks:
             - ros
         build:
@@ -25,10 +25,6 @@ services:
             dockerfile: ./dockerfile
         environment:
             - "DISPLAY=novnc:0.0"
-        command: >
-            bash -c "
-                ros2 run turtlesim turtlesim_node
-            "
 
 
 networks:

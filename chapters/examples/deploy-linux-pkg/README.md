@@ -4,13 +4,13 @@ This process will be illustrated using the ROS Humble turtlesim tutorial (https:
 
 ## Creating the Image
 
-The process of image deployment is really simple and consists in 3 simple steps:
+The process of image deployment is really simple and consists of 3 simple steps:
 
 1. Acquire the base image
     ```
     FROM osrf/ros:humble-desktop
     ```
-    Select an image that provides you most of the base requirements to run your application.
+    Select an image that provides you with most of the base requirements to run your application.
 2. Install necessary packages
     ```
     RUN apt-get update && \
@@ -53,7 +53,6 @@ turtlesim:
         context: .
         dockerfile: ./dockerfile
     environment:
-        - "QT_X11_NO_MITSHM=1" #fix some QT bugs
         - "DISPLAY=novnc:0.0"
     command: >
         bash -c "
@@ -70,10 +69,7 @@ docker compose up -d turtlesim
 **Run turtle_teleop_key node:**
 
 The turtle_teleop_key node can be launched in the same container as the turtlesim_node. This can be achieved by using the command below:
-```
-docker exec -it turtlesim bash -c "source /opt/ros/humble/setup.bash && ros2 run turtlesim turtle_teleop_key"
-```
-This command is attaching a terminal in the host computer to bash terminal inside the container and executing commands `source /opt/ros/humble/setup.bash` and `ros2 run turtlesim turtle_teleop_key`.
+This command attaches a terminal in the host computer to the bash terminal inside the container and executes commands `source` /opt/ros/humble/setup.bash` and `ros2 run turtlesim turtle_teleop_key`.
 
 ## Challenge
 
