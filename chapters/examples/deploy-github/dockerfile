@@ -1,14 +1,14 @@
 # 1. Acquire the base image
-FROM osrf/ros:humble-desktop
+FROM osrf/ros:galactic-desktop
 
 # 2. Install packages
 WORKDIR /workspace
 RUN apt-get update && \
     apt-get install -y unzip && \
     /bin/bash -c "git clone https://github.com/lucyannofrota/real-time-floor-demo.git ./src/floor_demo && \
-                  source /opt/ros/humble/setup.bash && \
+                  source /opt/ros/galactic/setup.bash && \
                   colcon build"
 
 # 3. Configure execution (`entrypoint`, `command`)
-RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/galactic/setup.bash" >> ~/.bashrc
 CMD ["/bin/bash", "-c", ". install/setup.bash && ros2 launch floor_demo floor_demo_launch.py"]

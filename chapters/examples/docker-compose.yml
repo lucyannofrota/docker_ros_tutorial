@@ -1,0 +1,22 @@
+
+version: '2.17.2'
+
+services:
+
+    novnc:
+        image: theasp/novnc:latest
+        container_name: novnc
+        networks:
+            - ros-tutorial-network
+        environment:
+            - "DISPLAY_WIDTH=1920"
+            - "DISPLAY_HEIGHT=1080"
+            - "RUN_XTERM=no"
+        ports:
+            - "1348:8080"
+
+networks:
+    ros-tutorial-network:
+        name: ros-tutorial-network
+        driver: bridge
+        external: false
