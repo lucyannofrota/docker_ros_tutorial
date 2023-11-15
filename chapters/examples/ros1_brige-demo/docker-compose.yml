@@ -1,0 +1,111 @@
+
+version: '2.17.2'
+
+services:
+
+    # bridge-ros1:
+    #     image: bridge-ros1
+    #     container_name: bridge-ros1
+    #     networks:
+    #         - ros-tutorial-network
+    #     build:
+    #         context: .
+    #         dockerfile: ./bridge-ros1.dockerfile
+    #         target: ros1
+    #         args:
+    #           ROS1_DISTRO: noetic
+    #           ROS1_WORKSPACE: /noetic
+    #           ROS1_INSTALL_PATH: /opt/ros/noetic
+    #           ROS_MASTER_URI: http://localhost:11311
+    #     environment:
+    #         - "DISPLAY=novnc:0.0"
+
+    bridge-ros1-config:
+        image: bridge-ros1-config
+        container_name: bridge-ros1-config
+        networks:
+            - ros-tutorial-network
+        build:
+            context: .
+            dockerfile: ./bridge-ros1.dockerfile
+            target: ros1-config
+            args:
+              ROS1_DISTRO: noetic
+              ROS1_WORKSPACE: /noetic
+              ROS1_INSTALL_PATH: /opt/ros/noetic
+              ROS_MASTER_URI: http://localhost:11311
+        environment:
+            - "DISPLAY=novnc:0.0"
+
+    # bridge-ros2:
+    #     image: bridge-ros2
+    #     container_name: bridge-ros2
+    #     depends_on:
+    #         - bridge-ros1-config
+    #     networks:
+    #         - ros-tutorial-network
+    #     build:
+    #         context: .
+    #         dockerfile: ./bridge-ros2.dockerfile
+    #         target: ros2
+    #         args:
+    #           # ROS2
+    #           ROS2_DISTRO: foxy
+    #           ROS2_WORKSPACE: /foxy
+    #           ROS2_INSTALL_PATH: /opt/ros/foxy
+    #           ROS_DOMAIN_ID: 4
+    #     environment:
+    #         - "DISPLAY=novnc:0.0"
+
+    bridge-ros2-config:
+        image: bridge-ros2-config
+        container_name: bridge-ros2-config
+        depends_on:
+            - bridge-ros1-config
+        networks:
+            - ros-tutorial-network
+        build:
+            context: .
+            dockerfile: ./bridge-ros2.dockerfile
+            target: ros2-config
+            args:
+              # ROS2
+              ROS2_DISTRO: foxy
+              ROS2_WORKSPACE: /foxy
+              ROS2_INSTALL_PATH: /opt/ros/foxy
+              ROS_DOMAIN_ID: 4
+        environment:
+            - "DISPLAY=novnc:0.0"
+
+    bridge:
+        image: bridge
+        container_name: bridge
+        depends_on:
+            - bridge-ros2-config
+        networks:
+            - ros-tutorial-network
+            # - host
+        build:
+            context: .
+            dockerfile: ./bridge-config.dockerfile
+            target: bridge
+        environment:
+            - "DISPLAY=novnc:0.0"
+            - "ROS_MASTER_URI=http://localhost:11311"
+        command: >
+            bash -c "
+                (source /opt/ros/noetic/setup.bash && roscore) &
+                (sleep 1 && source /opt/ros/noetic/setup.bash && source /opt/ros/foxy/setup.bash && ros2 run ros1_bridge dynamic_bridge) & 
+                (sleep 2 && source /opt/ros/noetic/setup.bash && rosrun turtlesim turtlesim_node)
+            "
+
+
+networks:
+    ros-tutorial-network:
+        name: ros-tutorial-network
+        driver: bridge
+        external: true
+    # host:
+    #   name: host
+    #   driver: host
+    #   external: true
